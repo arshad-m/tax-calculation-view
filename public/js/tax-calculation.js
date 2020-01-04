@@ -12,8 +12,9 @@ $(document).on("click", "#submit", function() {
         method: 'post',
         dataType: "json",
         data: $("#calculate_tax").serializeArray(),
-        success: function(result) {
-            if (result) {
+        success: function(result, status, xhr) {
+			
+            if (result && xhr['status'] == 200) {
                 // update the tax related fileds with response values
                 Object.entries(result.details).forEach(([key, value]) => {
                     if(key != 'total_deduction' || key != 'gross_total_income'){
@@ -49,6 +50,9 @@ $(document).on("click", "#submit", function() {
             } else {
                 alert('Opps...!!!')
             }
-        }
+        },
+		error: function(error) {
+			alert('API Error, please make sure service is available.')
+		}
     });
 })

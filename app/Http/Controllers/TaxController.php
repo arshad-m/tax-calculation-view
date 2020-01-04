@@ -22,8 +22,14 @@ class TaxController extends Controller
             ->withData( ['form_fields' => json_encode($this->request->all())] )
             ->withOption('SSL_VERIFYHOST', false)
             ->withOption('TIMEOUT',0)
+			->returnResponseObject()
             ->post();
 
-        return response($server_response, 200);
+		if($server_response->status == 200){
+			return response($server_response->content, 200);
+		}else {
+			return response([], 404);
+		}
+        
     }
 }
